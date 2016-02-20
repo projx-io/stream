@@ -9,7 +9,7 @@ use ProjxIO\Logic\Operations\EqualTo;
 use ProjxIO\Logic\Operations\LessThan;
 use ProjxIO\Logic\Operations\MoreThan;
 
-class Logic
+class Op
 {
     /**
      * @param callable $callback

@@ -7,26 +7,20 @@ class StreamBuilder implements Stream
     /**
      * @var callable
      */
-    private $callback;
+    private $callbacks;
     /**
      * @var OperationFactory
      */
     private $operations;
-    /**
-     * @var StreamFactory
-     */
-    private $factory;
 
     /**
      * @param OperationFactory $operations
-     * @param callable $callback
-     * @param StreamFactory $factory
+     * @param array $callbacks
      */
-    public function __construct(OperationFactory $operations = null, callable $callback = null, StreamFactory $factory = null)
+    public function __construct(OperationFactory $operations = null, array $callbacks = [])
     {
-        $this->callback = $callback;
+        $this->callbacks = $callbacks;
         $this->operations = $operations ?: new OperationFactory();
-        $this->factory = $factory ?: new ParentStreamFactory();
     }
 
     public function __invoke()
@@ -47,12 +41,18 @@ class StreamBuilder implements Stream
      */
     public function apply(array $args = [])
     {
-        return call_user_func_array($this->callback, $args);
+        foreach ($this->callbacks as $callback) {
+            $args = [call_user_func_array($callback, $args)];
+        }
+
+        return array_shift($args);
     }
 
     public function then($callback)
     {
-        return $this->factory->makeStream($this->operations, $this, $callback);
+        $callbacks = $this->callbacks;
+        $callbacks[] = $callback;
+        return new StreamBuilder($this->operations, $callbacks);
     }
 
     /**
@@ -82,8 +82,8 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function filter()
+    public function mapFilter()
     {
-        return $this->then($this->operations->filter(func_get_args()));
+        return $this->then($this->operations->mapFilter(func_get_args()));
     }
 }

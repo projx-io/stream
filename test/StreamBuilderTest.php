@@ -50,7 +50,7 @@ class StreamBuilderTest extends PHPUnit_Framework_TestCase
     {
         $stream = stream();
 
-        for ($i = 0; $i < 40; $i++)  {
+        for ($i = 0; $i < 4000; $i++)  {
             $stream = $stream->map(new Bind(new Plus(), 1));
         }
 

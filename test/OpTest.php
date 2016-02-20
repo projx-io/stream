@@ -4,12 +4,12 @@ namespace ProjxIO\Logic;
 
 use PHPUnit_Framework_TestCase;
 
-class LogicTest extends PHPUnit_Framework_TestCase
+class OpTest extends PHPUnit_Framework_TestCase
 {
 
     public function dataProvider()
     {
-        $logic = 'ProjxIO\Logic\Logic::';
+        $logic = 'ProjxIO\Logic\Op::';
 
         return [
             [$logic . 'equalTo', 10, 20, false],
