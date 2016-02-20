@@ -6,8 +6,10 @@ use ProjxIO\Logic\Operations\AtLeast;
 use ProjxIO\Logic\Operations\AtMost;
 use ProjxIO\Logic\Operations\BindArray;
 use ProjxIO\Logic\Operations\EqualTo;
+use ProjxIO\Logic\Operations\Filter;
 use ProjxIO\Logic\Operations\LessThan;
 use ProjxIO\Logic\Operations\Map;
+use ProjxIO\Logic\Operations\MapFilter;
 use ProjxIO\Logic\Operations\MoreThan;
 use ProjxIO\Logic\Operations\Pass;
 
@@ -46,6 +48,16 @@ class OperationFactory
     /**
      * @var callable
      */
+    private $filter;
+
+    /**
+     * @var callable
+     */
+    private $mapFilter;
+
+    /**
+     * @var callable
+     */
     private $pass;
 
     /**
@@ -55,6 +67,7 @@ class OperationFactory
      * @param callable $atMost
      * @param callable $atLeast
      * @param callable $map
+     * @param callable $filter
      * @param callable $pass
      */
     public function __construct(
@@ -64,6 +77,8 @@ class OperationFactory
         callable $atMost = null,
         callable $atLeast = null,
         callable $map = null,
+        callable $filter = null,
+        callable $mapFilter = null,
         callable $pass = null
     )
     {
@@ -73,6 +88,8 @@ class OperationFactory
         $this->atMost = $atMost ?: new AtMost();
         $this->atLeast = $atLeast ?: new AtLeast();
         $this->map = $map ?: new Map();
+        $this->filter = $filter ?: new Filter();
+        $this->mapFilter = $mapFilter ?: new MapFilter();
         $this->pass = $pass ?: new Pass();
     }
 
@@ -142,5 +159,23 @@ class OperationFactory
     public function map(array $params = [])
     {
         return $this->bind($this->map, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function filter(array $params = [])
+    {
+        return $this->bind($this->filter, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function mapFilter(array $params = [])
+    {
+        return $this->bind($this->mapFilter, $params);
     }
 }

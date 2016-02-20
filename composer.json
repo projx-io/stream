@@ -13,7 +13,10 @@
   "autoload": {
     "psr-4": {
       "ProjxIO\\Logic\\": "src"
-    }
+    },
+    "files": [
+      "src/stream.php"
+    ]
   },
   "require": {
     "projx-io/container": "^1.1"

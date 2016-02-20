@@ -31,7 +31,23 @@ class StreamBuilder implements Stream
 
     public function __invoke()
     {
-        return call_user_func_array($this->callback, func_get_args());
+        return $this->apply(func_get_args());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function call()
+    {
+        return $this->apply(func_get_args());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function apply(array $args = [])
+    {
+        return call_user_func_array($this->callback, $args);
     }
 
     public function then($callback)
@@ -53,5 +69,21 @@ class StreamBuilder implements Stream
     public function map()
     {
         return $this->then($this->operations->map(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function filter()
+    {
+        return $this->then($this->operations->filter(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function filter()
+    {
+        return $this->then($this->operations->filter(func_get_args()));
     }
 }
