@@ -7,7 +7,9 @@ use ProjxIO\Logic\Operations\AtMost;
 use ProjxIO\Logic\Operations\BindArray;
 use ProjxIO\Logic\Operations\EqualTo;
 use ProjxIO\Logic\Operations\LessThan;
+use ProjxIO\Logic\Operations\Map;
 use ProjxIO\Logic\Operations\MoreThan;
+use ProjxIO\Logic\Operations\Pass;
 
 class OperationFactory
 {
@@ -37,24 +39,41 @@ class OperationFactory
     private $atLeast;
 
     /**
+     * @var callable
+     */
+    private $map;
+
+    /**
+     * @var callable
+     */
+    private $pass;
+
+    /**
      * @param callable $equalTo
      * @param callable $moreThan
      * @param callable $lessThan
      * @param callable $atMost
      * @param callable $atLeast
+     * @param callable $map
+     * @param callable $pass
      */
     public function __construct(
         callable $equalTo = null,
         callable $moreThan = null,
         callable $lessThan = null,
         callable $atMost = null,
-        callable $atLeast = null
-    ) {
+        callable $atLeast = null,
+        callable $map = null,
+        callable $pass = null
+    )
+    {
         $this->equalTo = $equalTo ?: new EqualTo();
         $this->moreThan = $moreThan ?: new MoreThan();
         $this->lessThan = $lessThan ?: new LessThan();
         $this->atMost = $atMost ?: new AtMost();
         $this->atLeast = $atLeast ?: new AtLeast();
+        $this->map = $map ?: new Map();
+        $this->pass = $pass ?: new Pass();
     }
 
     public function bind(callable $callback, array $args = [])
@@ -63,42 +82,65 @@ class OperationFactory
     }
 
     /**
+     * @param array $params
      * @return callable
      */
-    public function equalTo()
+    public function equalTo(array $params = [])
     {
-        return $this->bind($this->equalTo, func_get_args());
+        return $this->bind($this->equalTo, $params);
     }
 
     /**
+     * @param array $params
      * @return callable
      */
-    public function moreThan()
+    public function moreThan(array $params = [])
     {
-        return $this->bind($this->moreThan, func_get_args());
+        return $this->bind($this->moreThan, $params);
     }
 
     /**
+     * @param array $params
      * @return callable
      */
-    public function lessThan()
+    public function lessThan(array $params = [])
     {
-        return $this->bind($this->lessThan, func_get_args());
+        return $this->bind($this->lessThan, $params);
     }
 
     /**
+     * @param array $params
      * @return callable
      */
-    public function atMost()
+    public function atMost(array $params = [])
     {
-        return $this->bind($this->atMost, func_get_args());
+        return $this->bind($this->atMost, $params);
     }
 
     /**
+     * @param array $params
      * @return callable
      */
-    public function atLeast()
+    public function atLeast(array $params = [])
     {
-        return $this->bind($this->atLeast, func_get_args());
+        return $this->bind($this->atLeast, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function pass(array $params = [])
+    {
+        return $this->bind($this->pass, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function map(array $params = [])
+    {
+        return $this->bind($this->map, $params);
     }
 }
