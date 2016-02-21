@@ -55,6 +55,9 @@ class OpTest extends PHPUnit_Framework_TestCase
 
             [$op . 'keyOf', ['a', 'b', 'c'], 0, true],
             [$op . 'keyOf', ['a', 'b', 'c'], 4, false],
+
+            [$op . 'getFrom', ['a', 'b', 'c'], 1, 'b'],
+            [$op . 'getFrom', ['a', 'b', 'c'], 2, 'c'],
         ];
     }
 
