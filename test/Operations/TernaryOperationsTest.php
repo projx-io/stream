@@ -9,7 +9,8 @@ class TernaryOperationsTest extends PHPUnit_Framework_TestCase
     public function binaryOperations()
     {
         return [
-            [new Iif(), true, 1, 2, 1],
+            [new Iif(), 5, 10, true, 5],
+            [new Iif(), 5, 10, false, 10],
         ];
     }
 
