@@ -106,7 +106,7 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function valueOf($array, $value)
+    public function valueOf($array = null, $value = null)
     {
         return $this->then($this->operations->valueOf(func_get_args()));
     }
@@ -114,7 +114,7 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function keyOf($array, $value)
+    public function keyOf($array = null, $value = null)
     {
         return $this->then($this->operations->keyOf(func_get_args()));
     }
@@ -122,24 +122,48 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function putIn(&$array, callable $rename, $value, $key)
+    public function putIn(&$array = null, callable $rename = null, $value = null, $key = null)
     {
-        return $this->then($this->operations->putIn(func_get_args()));
+        $args = func_get_args();
+        if (count($args) > 1) {
+            $args = array_merge([&$array], array_slice(func_get_args(), 1));
+        }
+        return $this->then($this->operations->putIn($args));
     }
 
     /**
      * @inheritDoc
      */
-    public function addTo(&$array, $value)
+    public function addTo(&$array = null, $value = null)
     {
-        return $this->then($this->operations->addTo(func_get_args()));
+        $args = func_get_args();
+        if (count($args) > 1) {
+            $args = array_merge([&$array], array_slice(func_get_args(), 1));
+        }
+        return $this->then($this->operations->addTo($args));
     }
 
     /**
      * @inheritDoc
      */
-    public function getFrom($value, $keys)
+    public function getFrom($value = null, $keys = null)
     {
         return $this->then($this->operations->getFrom(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function key()
+    {
+        return $this->then($this->operations->key());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function value()
+    {
+        return $this->then($this->operations->value());
     }
 }

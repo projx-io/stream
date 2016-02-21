@@ -4,6 +4,7 @@ namespace ProjxIO\Logic;
 
 use PHPUnit_Framework_TestCase;
 use ProjxIO\Logic\Operations\Bind;
+use ProjxIO\Logic\Operations\Pass;
 use ProjxIO\Logic\Operations\Plus;
 
 class StreamBuilderTest extends PHPUnit_Framework_TestCase
@@ -53,5 +54,21 @@ class StreamBuilderTest extends PHPUnit_Framework_TestCase
             ->mapFilter(stream()->get('a'), stream()->has(['b', 'c']))
             ->call(collect([['a' => ['b' => ['c' => 'd']]], ['a' => []]])->items());
         $this->assertEquals($expect, $actual);
+    }
+
+    public function testPutIn()
+    {
+        $expect = ['d', 'a', 'b', 'c'];
+        $array = ['d'];
+        stream()->map(stream()->putIn($array, stream()->key()))->call(['a', 'b', 'c']);
+        $this->assertEquals($expect, $array);
+    }
+
+    public function testPutIn2()
+    {
+        $expect = ['d', 'a' => 'a', 'b' => 'b', 'c' => 'c'];
+        $array = ['d'];
+        stream()->map(stream()->putIn($array, stream()->value()))->call(['a', 'b', 'c']);
+        $this->assertEquals($expect, $array);
     }
 }

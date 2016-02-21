@@ -60,14 +60,14 @@ interface Stream
      * @param $value
      * @return callable
      */
-    public function valueOf($array, $value);
+    public function valueOf($array = null, $value = null);
 
     /**
      * @param $array
      * @param $value
      * @return callable
      */
-    public function keyOf($array, $value);
+    public function keyOf($array = null, $value = null);
 
     /**
      * @param $array
@@ -76,19 +76,29 @@ interface Stream
      * @param $key
      * @return callable
      */
-    public function putIn(&$array, callable $rename, $value, $key);
+    public function putIn(&$array = null, callable $rename = null, $value = null, $key = null);
 
     /**
      * @param $array
      * @param $value
      * @return callable
      */
-    public function addTo(&$array, $value);
+    public function addTo(&$array = null, $value = null);
 
     /**
      * @param $value
      * @param $keys
      * @return callable
      */
-    public function getFrom($value, $keys);
+    public function getFrom($value = null, $keys = null);
+
+    /**
+     * @return callable
+     */
+    public function key();
+
+    /**
+     * @return callable
+     */
+    public function value();
 }

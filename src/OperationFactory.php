@@ -12,6 +12,7 @@ use ProjxIO\Logic\Operations\Filter;
 use ProjxIO\Logic\Operations\Get;
 use ProjxIO\Logic\Operations\GetFrom;
 use ProjxIO\Logic\Operations\Has;
+use ProjxIO\Logic\Operations\Key;
 use ProjxIO\Logic\Operations\KeyOf;
 use ProjxIO\Logic\Operations\LessThan;
 use ProjxIO\Logic\Operations\Map;
@@ -19,6 +20,7 @@ use ProjxIO\Logic\Operations\MapFilter;
 use ProjxIO\Logic\Operations\MoreThan;
 use ProjxIO\Logic\Operations\Pass;
 use ProjxIO\Logic\Operations\PutIn;
+use ProjxIO\Logic\Operations\Value;
 use ProjxIO\Logic\Operations\ValueOf;
 
 class OperationFactory
@@ -95,6 +97,14 @@ class OperationFactory
      * @var callable
      */
     private $getFrom;
+    /**
+     * @var callable
+     */
+    private $key;
+    /**
+     * @var callable
+     */
+    private $value;
 
     /**
      * @param callable $equalTo
@@ -112,6 +122,8 @@ class OperationFactory
      * @param callable $addTo
      * @param callable $putIn
      * @param callable $getFrom
+     * @param callable $key
+     * @param callable $value
      * @param callable $pass
      */
     public function __construct(
@@ -130,6 +142,8 @@ class OperationFactory
         callable $addTo = null,
         callable $putIn = null,
         callable $getFrom = null,
+        callable $key = null,
+        callable $value = null,
         callable $pass = null
     ) {
         $this->equalTo = $equalTo ?: new EqualTo();
@@ -148,6 +162,8 @@ class OperationFactory
         $this->putIn = $putIn ?: new PutIn();
         $this->addTo = $addTo ?: new AddTo();
         $this->getFrom = $getFrom ?: new GetFrom();
+        $this->key = $key ?: new Key();
+        $this->value = $value ?: new Value();
     }
 
     public function bind(callable $callback)
@@ -302,5 +318,21 @@ class OperationFactory
     public function getFrom(array $params = [])
     {
         return $this->bindArray($this->getFrom, $params);
+    }
+
+    /**
+     * @return callable
+     */
+    public function key()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @return callable
+     */
+    public function value()
+    {
+        return $this->value;
     }
 }
