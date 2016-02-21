@@ -102,4 +102,44 @@ class StreamBuilder implements Stream
     {
         return $this->then($this->operations->get(func_get_args()));
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function valueOf($array, $value)
+    {
+        return $this->then($this->operations->valueOf(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function keyOf($array, $value)
+    {
+        return $this->then($this->operations->keyOf(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function putIn(&$array, callable $rename, $value, $key)
+    {
+        return $this->then($this->operations->putIn(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addTo(&$array, $value)
+    {
+        return $this->then($this->operations->addTo(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFrom($value, $keys)
+    {
+        return $this->then($this->operations->getFrom(func_get_args()));
+    }
 }

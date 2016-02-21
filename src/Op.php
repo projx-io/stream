@@ -13,13 +13,20 @@ use ProjxIO\Logic\Operations\MoreThan;
 
 class Op
 {
+    public static $operationFactory = null;
+
+    public static function operationFactory()
+    {
+        return self::$operationFactory = self::$operationFactory ?: new OperationFactory();
+    }
+
     /**
      * @param callable $callback
      * @return callable
      */
     public static function bind(callable $callback)
     {
-        return self::bindArray($callback, array_slice(func_get_args(), 1));
+        return self::operationFactory()->bindArray($callback, func_get_args());
     }
 
     /**
@@ -29,90 +36,11 @@ class Op
      */
     public static function bindArray(callable $callback, array $params = [])
     {
-        return count($params) ? new BindArray($callback, $params) : $callback;
+        return self::operationFactory()->bindArray($callback, $params);
     }
 
-    /**
-     * @param mixed $a
-     * @param mixed $b
-     * @return callable
-     */
-    public static function equalTo($a = null, $b = null)
+    public static function __callStatic($name, $arguments)
     {
-        static $callback;
-        $callback = $callback ?: new EqualTo();
-        return self::bindArray($callback, func_get_args());
-    }
-
-    /**
-     * @param mixed $a
-     * @param mixed $b
-     * @return callable
-     */
-    public static function lessThan($a = null, $b = null)
-    {
-        static $callback;
-        $callback = $callback ?: new LessThan();
-        return self::bindArray($callback, func_get_args());
-    }
-
-    /**
-     * @param mixed $a
-     * @param mixed $b
-     * @return callable
-     */
-    public static function moreThan($a = null, $b = null)
-    {
-        static $callback;
-        $callback = $callback ?: new MoreThan();
-        return self::bindArray($callback, func_get_args());
-    }
-
-    /**
-     * @param mixed $a
-     * @param mixed $b
-     * @return callable
-     */
-    public static function atMost($a = null, $b = null)
-    {
-        static $callback;
-        $callback = $callback ?: new AtMost();
-        return self::bindArray($callback, func_get_args());
-    }
-
-    /**
-     * @param mixed $a
-     * @param mixed $b
-     * @return callable
-     */
-    public static function atLeast($a = null, $b = null)
-    {
-        static $callback;
-        $callback = $callback ?: new AtLeast();
-        return self::bindArray($callback, func_get_args());
-    }
-
-    /**
-     * @param null $key
-     * @param null $value
-     * @return callable
-     */
-    public static function has($key = null, $value = null)
-    {
-        static $callback;
-        $callback = $callback ?: new Has();
-        return self::bindArray($callback, func_get_args());
-    }
-
-    /**
-     * @param null $key
-     * @param null $value
-     * @return callable
-     */
-    public static function get($key = null, $value = null)
-    {
-        static $callback;
-        $callback = $callback ?: new Get();
-        return self::bindArray($callback, func_get_args());
+        return call_user_func([self::operationFactory(), $name], $arguments);
     }
 }

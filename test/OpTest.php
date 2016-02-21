@@ -49,6 +49,12 @@ class OpTest extends PHPUnit_Framework_TestCase
             [$op . 'get', [0, 2, 0], [[5, 6, [7]]], 7],
             [$op . 'get', [0, 2, 0], [[5, 6, (object)[7]]], 7],
             [$op . 'get', [0, 2, 'a'], [[5, 6, (object)['a' => 7]]], 7],
+
+            [$op . 'valueOf', ['a', 'b', 'c'], 'c', true],
+            [$op . 'valueOf', ['a', 'b', 'c'], 'd', false],
+
+            [$op . 'keyOf', ['a', 'b', 'c'], 0, true],
+            [$op . 'keyOf', ['a', 'b', 'c'], 4, false],
         ];
     }
 

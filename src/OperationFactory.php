@@ -2,18 +2,24 @@
 
 namespace ProjxIO\Logic;
 
+use ProjxIO\Logic\Operations\AddTo;
 use ProjxIO\Logic\Operations\AtLeast;
 use ProjxIO\Logic\Operations\AtMost;
+use ProjxIO\Logic\Operations\Bind;
 use ProjxIO\Logic\Operations\BindArray;
 use ProjxIO\Logic\Operations\EqualTo;
 use ProjxIO\Logic\Operations\Filter;
 use ProjxIO\Logic\Operations\Get;
+use ProjxIO\Logic\Operations\GetFrom;
 use ProjxIO\Logic\Operations\Has;
+use ProjxIO\Logic\Operations\KeyOf;
 use ProjxIO\Logic\Operations\LessThan;
 use ProjxIO\Logic\Operations\Map;
 use ProjxIO\Logic\Operations\MapFilter;
 use ProjxIO\Logic\Operations\MoreThan;
 use ProjxIO\Logic\Operations\Pass;
+use ProjxIO\Logic\Operations\PutIn;
+use ProjxIO\Logic\Operations\ValueOf;
 
 class OperationFactory
 {
@@ -69,6 +75,26 @@ class OperationFactory
      * @var callable
      */
     private $has;
+    /**
+     * @var callable
+     */
+    private $valueOf;
+    /**
+     * @var callable
+     */
+    private $keyOf;
+    /**
+     * @var callable
+     */
+    private $putIn;
+    /**
+     * @var callable
+     */
+    private $addTo;
+    /**
+     * @var callable
+     */
+    private $getFrom;
 
     /**
      * @param callable $equalTo
@@ -81,6 +107,11 @@ class OperationFactory
      * @param callable $mapFilter
      * @param callable $has
      * @param callable $get
+     * @param callable $keyOf
+     * @param callable $valueOf
+     * @param callable $addTo
+     * @param callable $putIn
+     * @param callable $getFrom
      * @param callable $pass
      */
     public function __construct(
@@ -94,9 +125,13 @@ class OperationFactory
         callable $mapFilter = null,
         callable $has = null,
         callable $get = null,
+        callable $keyOf = null,
+        callable $valueOf = null,
+        callable $addTo = null,
+        callable $putIn = null,
+        callable $getFrom = null,
         callable $pass = null
-    )
-    {
+    ) {
         $this->equalTo = $equalTo ?: new EqualTo();
         $this->moreThan = $moreThan ?: new MoreThan();
         $this->lessThan = $lessThan ?: new LessThan();
@@ -108,9 +143,19 @@ class OperationFactory
         $this->pass = $pass ?: new Pass();
         $this->has = $has ?: new Has();
         $this->get = $get ?: new Get();
+        $this->valueOf = $valueOf ?: new ValueOf();
+        $this->keyOf = $keyOf ?: new KeyOf();
+        $this->putIn = $putIn ?: new PutIn();
+        $this->addTo = $addTo ?: new AddTo();
+        $this->getFrom = $getFrom ?: new GetFrom();
     }
 
-    public function bind(callable $callback, array $args = [])
+    public function bind(callable $callback)
+    {
+        return $this->bindArray($callback, func_get_args());
+    }
+
+    public function bindArray(callable $callback, array $args = [])
     {
         return count($args) ? new BindArray($callback, $args) : $callback;
     }
@@ -121,7 +166,7 @@ class OperationFactory
      */
     public function equalTo(array $params = [])
     {
-        return $this->bind($this->equalTo, $params);
+        return $this->bindArray($this->equalTo, $params);
     }
 
     /**
@@ -130,7 +175,7 @@ class OperationFactory
      */
     public function moreThan(array $params = [])
     {
-        return $this->bind($this->moreThan, $params);
+        return $this->bindArray($this->moreThan, $params);
     }
 
     /**
@@ -139,7 +184,7 @@ class OperationFactory
      */
     public function lessThan(array $params = [])
     {
-        return $this->bind($this->lessThan, $params);
+        return $this->bindArray($this->lessThan, $params);
     }
 
     /**
@@ -148,7 +193,7 @@ class OperationFactory
      */
     public function atMost(array $params = [])
     {
-        return $this->bind($this->atMost, $params);
+        return $this->bindArray($this->atMost, $params);
     }
 
     /**
@@ -157,7 +202,7 @@ class OperationFactory
      */
     public function atLeast(array $params = [])
     {
-        return $this->bind($this->atLeast, $params);
+        return $this->bindArray($this->atLeast, $params);
     }
 
     /**
@@ -166,7 +211,7 @@ class OperationFactory
      */
     public function pass(array $params = [])
     {
-        return $this->bind($this->pass, $params);
+        return $this->bindArray($this->pass, $params);
     }
 
     /**
@@ -175,7 +220,7 @@ class OperationFactory
      */
     public function map(array $params = [])
     {
-        return $this->bind($this->map, $params);
+        return $this->bindArray($this->map, $params);
     }
 
     /**
@@ -184,7 +229,7 @@ class OperationFactory
      */
     public function filter(array $params = [])
     {
-        return $this->bind($this->filter, $params);
+        return $this->bindArray($this->filter, $params);
     }
 
     /**
@@ -193,7 +238,7 @@ class OperationFactory
      */
     public function mapFilter(array $params = [])
     {
-        return $this->bind($this->mapFilter, $params);
+        return $this->bindArray($this->mapFilter, $params);
     }
 
     /**
@@ -202,7 +247,7 @@ class OperationFactory
      */
     public function has(array $params = [])
     {
-        return $this->bind($this->has, $params);
+        return $this->bindArray($this->has, $params);
     }
 
     /**
@@ -211,6 +256,51 @@ class OperationFactory
      */
     public function get(array $params = [])
     {
-        return $this->bind($this->get, $params);
+        return $this->bindArray($this->get, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function valueOf(array $params = [])
+    {
+        return $this->bindArray($this->valueOf, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function keyOf(array $params = [])
+    {
+        return $this->bindArray($this->keyOf, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function putIn(array $params = [])
+    {
+        return $this->bindArray($this->putIn, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function addTo(array $params = [])
+    {
+        return $this->bindArray($this->addTo, $params);
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function getFrom(array $params = [])
+    {
+        return $this->bindArray($this->getFrom, $params);
     }
 }

@@ -54,4 +54,41 @@ interface Stream
      * @return mixed
      */
     public function get($key = null, $value = null);
+
+    /**
+     * @param $array
+     * @param $value
+     * @return callable
+     */
+    public function valueOf($array, $value);
+
+    /**
+     * @param $array
+     * @param $value
+     * @return callable
+     */
+    public function keyOf($array, $value);
+
+    /**
+     * @param $array
+     * @param callable $rename
+     * @param $value
+     * @param $key
+     * @return callable
+     */
+    public function putIn(&$array, callable $rename, $value, $key);
+
+    /**
+     * @param $array
+     * @param $value
+     * @return callable
+     */
+    public function addTo(&$array, $value);
+
+    /**
+     * @param $value
+     * @param $keys
+     * @return callable
+     */
+    public function getFrom($value, $keys);
 }
