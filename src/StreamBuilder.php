@@ -124,8 +124,9 @@ class StreamBuilder implements Stream
      */
     public function putIn(&$array = null, callable $rename = null, $value = null, $key = null)
     {
+        // func_get_args does not seem to retain the reference, so rebuild it
         $args = func_get_args();
-        if (count($args) > 1) {
+        if (count($args) > 0) {
             $args = array_merge([&$array], array_slice(func_get_args(), 1));
         }
         return $this->then($this->operations->putIn($args));
@@ -136,8 +137,9 @@ class StreamBuilder implements Stream
      */
     public function addTo(&$array = null, $value = null)
     {
+        // func_get_args does not seem to retain the reference, so rebuild it
         $args = func_get_args();
-        if (count($args) > 1) {
+        if (count($args) > 0) {
             $args = array_merge([&$array], array_slice(func_get_args(), 1));
         }
         return $this->then($this->operations->addTo($args));

@@ -71,4 +71,20 @@ class StreamBuilderTest extends PHPUnit_Framework_TestCase
         stream()->map(stream()->putIn($array, stream()->value()))->call(['a', 'b', 'c']);
         $this->assertEquals($expect, $array);
     }
+
+    public function testAddTo()
+    {
+        $expect = ['d', 'a', 'b', 'c'];
+        $array = ['d'];
+        stream()->map(stream()->addTo($array))->call(['a', 'b', 'c']);
+        $this->assertEquals($expect, $array);
+    }
+
+    public function testAddTo2()
+    {
+        $expect = ['d' => 'd', 'a', 'b', 'c'];
+        $array = ['d' => 'd'];
+        stream()->map(stream()->addTo($array))->call(['a', 'b', 'c']);
+        $this->assertEquals($expect, $array);
+    }
 }
