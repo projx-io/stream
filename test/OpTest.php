@@ -58,6 +58,8 @@ class OpTest extends PHPUnit_Framework_TestCase
 
             [$op . 'getFrom', ['a', 'b', 'c'], 1, 'b'],
             [$op . 'getFrom', ['a', 'b', 'c'], 2, 'c'],
+
+            [$op . 'pass', 2, null, 2],
         ];
     }
 
