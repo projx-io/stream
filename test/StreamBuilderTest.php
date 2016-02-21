@@ -46,17 +46,12 @@ class StreamBuilderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $actual);
     }
 
-    public function testMapFilter2()
+    public function testHas()
     {
-        $stream = stream();
-
-        for ($i = 0; $i < 4000; $i++)  {
-            $stream = $stream->map(new Bind(new Plus(), 1));
-        }
-
-        var_dump($stream->call(collect([3, 4, 5])->items()));
-
-//        $this->assertEquals([2 => 5], $stream->call(collect([3, 4, 5])->items()));
-//        $this->assertEquals([1 => 5], $stream->apply([collect([3, 5, 4])->items()]));
+        $expect = [['a' => ['b' => ['c' => 'd']]]];
+        $actual = stream()
+            ->mapFilter(stream()->get('a'), stream()->has(['b', 'c']))
+            ->call(collect([['a' => ['b' => ['c' => 'd']]], ['a' => []]])->items());
+        $this->assertEquals($expect, $actual);
     }
 }

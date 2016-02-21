@@ -6,6 +6,8 @@ use ProjxIO\Logic\Operations\AtLeast;
 use ProjxIO\Logic\Operations\AtMost;
 use ProjxIO\Logic\Operations\BindArray;
 use ProjxIO\Logic\Operations\EqualTo;
+use ProjxIO\Logic\Operations\Get;
+use ProjxIO\Logic\Operations\Has;
 use ProjxIO\Logic\Operations\LessThan;
 use ProjxIO\Logic\Operations\MoreThan;
 
@@ -87,6 +89,30 @@ class Op
     {
         static $callback;
         $callback = $callback ?: new AtLeast();
+        return self::bindArray($callback, func_get_args());
+    }
+
+    /**
+     * @param null $key
+     * @param null $value
+     * @return callable
+     */
+    public static function has($key = null, $value = null)
+    {
+        static $callback;
+        $callback = $callback ?: new Has();
+        return self::bindArray($callback, func_get_args());
+    }
+
+    /**
+     * @param null $key
+     * @param null $value
+     * @return callable
+     */
+    public static function get($key = null, $value = null)
+    {
+        static $callback;
+        $callback = $callback ?: new Get();
         return self::bindArray($callback, func_get_args());
     }
 }

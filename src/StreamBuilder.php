@@ -31,7 +31,7 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function call()
+    public function call($param = null)
     {
         return $this->apply(func_get_args());
     }
@@ -48,7 +48,7 @@ class StreamBuilder implements Stream
         return array_shift($args);
     }
 
-    public function then($callback)
+    public function then(callable $callback)
     {
         $callbacks = $this->callbacks;
         $callbacks[] = $callback;
@@ -58,7 +58,7 @@ class StreamBuilder implements Stream
     /**
      * @inheritdoc
      */
-    public function equalTo()
+    public function equalTo($a = null, $b = null)
     {
         return $this->then($this->operations->equalTo(func_get_args()));
     }
@@ -66,7 +66,7 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function map()
+    public function map(callable $callback = null)
     {
         return $this->then($this->operations->map(func_get_args()));
     }
@@ -74,7 +74,7 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function filter()
+    public function filter(callable $callback = null)
     {
         return $this->then($this->operations->filter(func_get_args()));
     }
@@ -82,8 +82,24 @@ class StreamBuilder implements Stream
     /**
      * @inheritDoc
      */
-    public function mapFilter()
+    public function mapFilter(callable $map = null, callable $filter = null)
     {
         return $this->then($this->operations->mapFilter(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function has($key = null, $value = null)
+    {
+        return $this->then($this->operations->has(func_get_args()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get($key = null, $value = null)
+    {
+        return $this->then($this->operations->get(func_get_args()));
     }
 }
