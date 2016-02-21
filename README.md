@@ -1,1 +1,1 @@
-[![Build Status](https://travis-ci.org/projx-io/container.svg)](https://travis-ci.org/projx-io/container)
+[![Build Status](https://travis-ci.org/projx-io/stream.svg)](https://travis-ci.org/projx-io/stream)
