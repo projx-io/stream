@@ -5,8 +5,8 @@ namespace ProjxIO\Logic;
 use ProjxIO\Logic\Operations\AddTo;
 use ProjxIO\Logic\Operations\AtLeast;
 use ProjxIO\Logic\Operations\AtMost;
-use ProjxIO\Logic\Operations\Bind;
 use ProjxIO\Logic\Operations\BindArray;
+use ProjxIO\Logic\Operations\Collect;
 use ProjxIO\Logic\Operations\EqualTo;
 use ProjxIO\Logic\Operations\Filter;
 use ProjxIO\Logic\Operations\Get;
@@ -105,6 +105,10 @@ class OperationFactory
      * @var callable
      */
     private $value;
+    /**
+     * @var callable
+     */
+    private $collect;
 
     /**
      * @param callable $equalTo
@@ -124,6 +128,7 @@ class OperationFactory
      * @param callable $getFrom
      * @param callable $key
      * @param callable $value
+     * @param callable $collect
      * @param callable $pass
      */
     public function __construct(
@@ -144,6 +149,7 @@ class OperationFactory
         callable $getFrom = null,
         callable $key = null,
         callable $value = null,
+        callable $collect = null,
         callable $pass = null
     ) {
         $this->equalTo = $equalTo ?: new EqualTo();
@@ -164,6 +170,7 @@ class OperationFactory
         $this->getFrom = $getFrom ?: new GetFrom();
         $this->key = $key ?: new Key();
         $this->value = $value ?: new Value();
+        $this->collect = $collect ?: new Collect();
     }
 
     public function bind(callable $callback)
@@ -334,5 +341,14 @@ class OperationFactory
     public function value()
     {
         return $this->value;
+    }
+
+    /**
+     * @param array $params
+     * @return callable
+     */
+    public function collect(array $params = [])
+    {
+        return $this->bindArray($this->collect, $params);
     }
 }

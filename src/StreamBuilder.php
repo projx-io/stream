@@ -168,4 +168,12 @@ class StreamBuilder implements Stream
     {
         return $this->then($this->operations->value());
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function collect($collection = null)
+    {
+        return $this->then($this->operations->collect(func_get_args()));
+    }
 }

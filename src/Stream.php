@@ -101,4 +101,10 @@ interface Stream
      * @return callable
      */
     public function value();
+
+    /**
+     * @param array $collection
+     * @return callable
+     */
+    public function collect($collection = null);
 }
